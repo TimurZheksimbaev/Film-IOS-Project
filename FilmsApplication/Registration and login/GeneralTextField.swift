@@ -41,7 +41,9 @@ final class GeneralTextField: UITextField {
     private func setupTextField(placeholder: String) {
         textColor = .white
         layer.cornerRadius = 10
-        layer.backgroundColor = #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1)
+        layer.backgroundColor = UIColor(named: "MyColor")?.cgColor
+//        layer.backgroundColor = #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1)
+//        layer.backgroundColor = UIColor.systemBlue.cgColor
         layer.shadowRadius = 7
         layer.shadowOpacity = 0.4
         layer.shadowOffset = CGSize(width: 15, height: 15)

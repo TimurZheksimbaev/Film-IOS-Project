@@ -8,12 +8,13 @@
 import UIKit
 import Firebase
 
+
 final class RegisterViewController: UIViewController {
     
     //MARK: Private properties
     private let usernameTextField = GeneralTextField(placeholder: "Enter your username")
-    private let emailTextField = GeneralTextField(placeholder: "Enter your email address")
-    private let passwordTextField = GeneralTextField(placeholder: "Enter your password")
+    private let emailTextField = GeneralTextField(placeholder: TextsEnum.enterEmail.rawValue)
+    private let passwordTextField = GeneralTextField(placeholder: TextsEnum.enterPassword.rawValue)
     
     private let signUpButton = UIButton()
     private let signInButton = UIButton()
@@ -26,7 +27,7 @@ final class RegisterViewController: UIViewController {
     private let eyeButtonForPassword = EyeButton()
     
     private var isEyeButtonForPasswordPrivate = true
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +40,7 @@ final class RegisterViewController: UIViewController {
     @objc private func signUpButtonClicked() {
         guard let password = passwordTextField.text, !password.isEmpty, let email = emailTextField.text, !email.isEmpty, let username = usernameTextField.text, !username.isEmpty
         else {
-            showAlertWithWarning("Please fill all the fields")
+            showAlertWithWarning(TextsEnum.fillFields.rawValue)
             return
         }
         
@@ -47,16 +48,81 @@ final class RegisterViewController: UIViewController {
             if error == nil {
                 let ref = Database.database(url: "https://filmsapplication-6d462-default-rtdb.europe-west1.firebasedatabase.app").reference().child("users")
                 ref.child(result!.user.uid).updateChildValues(["username": self.usernameTextField.text!, "email": self.emailTextField.text!])
-                self.present(LoginViewController(), animated: true, completion: nil)
+                
+                self.goToMainPage()
+                
             } else {
                 print(error.debugDescription)
-                self.showAlertWithWarning("Invalid data")
+                self.showAlertWithWarning(TextsEnum.invalidData.rawValue)
             }
         }
     }
     
+    func goToMainPage() {
+        let tab = UITabBarController()
+        
+        let home = UINavigationController(rootViewController: HomeViewController())
+        home.title = "Home"
+        let search = UINavigationController(rootViewController: SearchViewController())
+        search.title = "Search"
+        let profile = UINavigationController(rootViewController: ProfileViewController())
+        profile.title = "Profile"
+        
+        
+        
+        tab.tabBar.tintColor = .black
+        
+        
+        
+        
+        tab.setViewControllers([home, search, profile], animated: false)
+        
+        guard let items = tab.tabBar.items else { return }
+        
+        let images = ["house", "magnifyingglass.circle", "person.circle"]
+        
+        for i in 0...2 {
+            items[i].image = UIImage(systemName: images[i])
+        }
+        
+        tab.modalPresentationStyle = .fullScreen
+        
+        navigationController?.present(tab, animated: true)
+    }
+    
     @objc private func signInButtonClicked() {
-        self.present(LoginViewController(), animated: true, completion: nil)
+        navigationController?.pushViewController(LoginViewController(), animated: true)
+        
+        //        let tab = UITabBarController()
+        //
+        //        let home = UINavigationController(rootViewController: HomeViewController())
+        //        home.title = "Home"
+        //        let search = UINavigationController(rootViewController: SearchViewController())
+        //        search.title = "Search"
+        //        let profile = UINavigationController(rootViewController: ProfileViewController())
+        //        profile.title = "Profile"
+        //
+        //
+        //
+        //        tab.tabBar.tintColor = .black
+        //
+        //
+        //
+        //
+        //        tab.setViewControllers([home, search, profile], animated: false)
+        //
+        //        guard let items = tab.tabBar.items else { return }
+        //
+        //        let images = ["house", "magnifyingglass.circle", "person.circle"]
+        //
+        //        for i in 0...2 {
+        //            items[i].image = UIImage(systemName: images[i])
+        //        }
+        //
+        //        tab.modalPresentationStyle = .fullScreen
+        //
+        //        navigationController?.present(tab, animated: true)
+        
     }
     
     private func showAlertWithWarning(_ warning: String) {
@@ -67,15 +133,15 @@ final class RegisterViewController: UIViewController {
     
     @objc private func eyeButtonForPasswordPressed() {
         let imageName = isEyeButtonForPasswordPrivate ? "eye" : "eye.slash"
-        
         passwordTextField.isSecureTextEntry.toggle()
         eyeButtonForPassword.setImage(UIImage(systemName: imageName), for: .normal)
         isEyeButtonForPasswordPrivate.toggle()
     }
-
+    
 }
 
 // MARK: Setting views
+
 private extension RegisterViewController {
     func setupView() {
         view.backgroundColor = .white
@@ -83,15 +149,14 @@ private extension RegisterViewController {
         addActions()
         
         configureLabels()
-        
         configureSignUpButton()
         configureSignInButton()
-        
         configureTextFields()
     }
 }
 
 // MARK: Configurations
+
 private extension RegisterViewController {
     func addSubViews() {
         view.addSubview(usernameTextField)
@@ -115,72 +180,67 @@ private extension RegisterViewController {
         usernameLabel.textColor = .black
         usernameLabel.text = "Username"
         usernameLabel.font = .systemFont(ofSize: 22)
-        setLabelConstraints(toItem: usernameLabel, topAnchorConstraint: 50)
+        setLabelConstraints(toItem: usernameLabel, topAnchorConstraint: 0)
         
         emailLabel.textColor = .black
-        emailLabel.text = "Email"
+        emailLabel.text = TextsEnum.email.rawValue
         emailLabel.font = .systemFont(ofSize: 22)
-        setLabelConstraints(toItem: emailLabel, topAnchorConstraint: 190)
-        
+        setLabelConstraints(toItem: emailLabel, topAnchorConstraint: 130)
         
         passwordLabel.textColor = .black
-        passwordLabel.text = "Password"
+        passwordLabel.text = TextsEnum.password.rawValue
         passwordLabel.font = .systemFont(ofSize: 22)
-        setLabelConstraints(toItem: passwordLabel, topAnchorConstraint: 330)
-        
+        setLabelConstraints(toItem: passwordLabel, topAnchorConstraint: 260)
         
         askLabel.textColor = .black
         askLabel.text = "Already have an account?"
         askLabel.textAlignment = .center
         askLabel.font = .systemFont(ofSize: 22)
-        setLabelConstraints(toItem: askLabel, topAnchorConstraint: 540)
+        setLabelConstraints(toItem: askLabel, topAnchorConstraint: 460)
     }
     
     func configureTextFields() {
         usernameTextField.autocapitalizationType = .none
-        
         emailTextField.autocapitalizationType = .none
         emailTextField.keyboardType = .emailAddress
-        
         passwordTextField.autocapitalizationType = .none
         passwordTextField.isSecureTextEntry = true
         passwordTextField.rightView = eyeButtonForPassword
         passwordTextField.rightViewMode = .always
         
-        // Constraints
-        setTextFieldConstraints(toItem: usernameTextField, topAnchorConstraint: 100)
-        setTextFieldConstraints(toItem: emailTextField, topAnchorConstraint: 240)
-        setTextFieldConstraints(toItem: passwordTextField, topAnchorConstraint: 380)
+        setTextFieldConstraints(toItem: usernameTextField, topAnchorConstraint: 50)
+        setTextFieldConstraints(toItem: emailTextField, topAnchorConstraint: 180)
+        setTextFieldConstraints(toItem: passwordTextField, topAnchorConstraint: 310)
     }
     
-    private func configureSignInButton() {
+    func configureSignInButton() {
         signInButton.setTitle("Sign in", for: .normal)
         signInButton.setTitleColor(UIColor.white, for: .normal)
         signInButton.titleLabel?.font = .systemFont(ofSize: 20)
-        setButtonConstraints(toItem: signInButton, topAnchorConstraint: 600)
+        setButtonConstraints(toItem: signInButton, topAnchorConstraint: 510)
         signInButton.layer.cornerRadius = 10
-        signInButton.layer.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        signInButton.layer.backgroundColor = UIColor.black.cgColor
         signInButton.addTarget(self, action:#selector(self.signInButtonClicked), for: .touchUpInside)
     }
     
     func configureSignUpButton() {
         signUpButton.setTitle("Sign up", for: .normal)
         signUpButton.titleLabel?.font = .systemFont(ofSize: 20)
-        setButtonConstraints(toItem: signUpButton, topAnchorConstraint: 465)
+        setButtonConstraints(toItem: signUpButton, topAnchorConstraint: 390)
         signUpButton.setTitleColor(UIColor.white, for: .normal)
         signUpButton.layer.cornerRadius = 10
-        signUpButton.layer.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        signUpButton.layer.backgroundColor = UIColor.black.cgColor
         signUpButton.addTarget(self, action:#selector(self.signUpButtonClicked), for: .touchUpInside)
         
     }
 }
 
 // MARK: Constraints
+
 private extension RegisterViewController {
     
     func setTextFieldConstraints(toItem: UITextField, topAnchorConstraint: CGFloat) {
         toItem.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             toItem.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topAnchorConstraint),
             toItem.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
@@ -190,7 +250,6 @@ private extension RegisterViewController {
     
     func setLabelConstraints(toItem: UILabel, topAnchorConstraint: CGFloat) {
         toItem.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             toItem.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topAnchorConstraint),
             toItem.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
@@ -201,7 +260,6 @@ private extension RegisterViewController {
     
     func setButtonConstraints(toItem: UIButton, topAnchorConstraint: CGFloat) {
         toItem.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             toItem.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topAnchorConstraint),
             toItem.widthAnchor.constraint(equalToConstant: 100),

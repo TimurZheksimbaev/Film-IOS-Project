@@ -2,11 +2,12 @@ import Firebase
 
 import UIKit
 
+
 final class LoginViewController: UIViewController {
 
     //MARK: Private properties
-    private let emailTextField = GeneralTextField(placeholder: "Enter your email address")
-    private let passwordTextField = GeneralTextField(placeholder: "Enter your password")
+    private let emailTextField = GeneralTextField(placeholder: TextsEnum.enterEmail.rawValue)
+    private let passwordTextField = GeneralTextField(placeholder: TextsEnum.enterPassword.rawValue)
     
     private let signInButton = UIButton()
     
@@ -14,34 +15,65 @@ final class LoginViewController: UIViewController {
     private let passwordLabel = UILabel()
     
     private let eyeButtonForPassword = EyeButton()
-    
     private var isEyeButtonForPasswordPrivate = true
-
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupView()
     }
     
+    func goToMainPage() {
+        
+        let tab = UITabBarController()
+
+        let home = UINavigationController(rootViewController: HomeViewController())
+        home.title = "Home"
+        let search = UINavigationController(rootViewController: SearchViewController())
+        search.title = "Search"
+        let profile = UINavigationController(rootViewController: ProfileViewController())
+        profile.title = "Profile"
+
+
+
+        tab.tabBar.tintColor = .black
+
+        tab.setViewControllers([home, search, profile], animated: false)
+
+        guard let items = tab.tabBar.items else { return }
+
+        let images = ["house", "magnifyingglass.circle", "person.circle"]
+
+        for i in 0...2 {
+            items[i].image = UIImage(systemName: images[i])
+        }
+
+        tab.modalPresentationStyle = .fullScreen
+        
+        navigationController?.present(tab, animated: true)
+    }
+    
     //MARK: Private methods
+
     @objc private func signInButtonClicked() {
         guard let password = passwordTextField.text, !password.isEmpty, let email = emailTextField.text, !email.isEmpty else {
-            showAlertWithWarning("Please fill all the fields")
+            showAlertWithWarning(TextsEnum.fillFields.rawValue)
             return
         }
-    
-        Auth.auth().signIn(withEmail: email, password: password) {(result, error) in
+
+        Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
             if error == nil {
-                self.showAlertWithWarning("Success!")
+                self.goToMainPage()
             } else if password.count < 6 {
                 self.showAlertWithWarning("Password length should be 6 or more")
             } else {
-                print(error.debugDescription)
-                self.showAlertWithWarning("Incorrect email or/and password")
+                self.showAlertWithWarning(TextsEnum.invalidData.rawValue)
             }
         }
+        
     }
+    
+    
     
     private func showAlertWithWarning(_ warning: String) {
         let alert = UIAlertController(title: "Warning", message: warning, preferredStyle: .alert)
@@ -60,7 +92,9 @@ final class LoginViewController: UIViewController {
 }
 
 // MARK: Setting views
+
 private extension LoginViewController {
+    
     func setupView() {
         view.backgroundColor = .white
         addSubViews()
@@ -75,6 +109,7 @@ private extension LoginViewController {
 }
 
 // MARK: Configurations
+
 private extension LoginViewController {
     func addSubViews() {
         view.addSubview(passwordTextField)
@@ -88,21 +123,20 @@ private extension LoginViewController {
         eyeButtonForPassword.addTarget(self, action: #selector(self.eyeButtonForPasswordPressed), for: .touchUpInside)
     }
     
-    private func configureLabels() {
+    func configureLabels() {
         emailLabel.textColor = .black
-        emailLabel.text = "Email"
+        emailLabel.text = TextsEnum.email.rawValue
         emailLabel.font = .systemFont(ofSize: 22)
         
         passwordLabel.textColor = .black
-        passwordLabel.text = "Password"
+        passwordLabel.text = TextsEnum.email.rawValue
         passwordLabel.font = .systemFont(ofSize: 22)
         
-        // Constraints
         setLabelConstraints(toItem: emailLabel, topAnchorConstraint: 50)
         setLabelConstraints(toItem: passwordLabel, topAnchorConstraint: 190)
     }
     
-    private func configureTextFields() {
+    func configureTextFields() {
         emailTextField.autocapitalizationType = .none
         emailTextField.keyboardType = .emailAddress
         setTextFieldConstraints(toItem: emailTextField, topAnchorConstraint: 100)
@@ -115,22 +149,23 @@ private extension LoginViewController {
 
     }
     
-    private func configureSignInButton() {
+    
+    func configureSignInButton() {
         signInButton.setTitle("Sign in", for: .normal)
         signInButton.setTitleColor(UIColor.white, for: .normal)
         signInButton.titleLabel?.font = .systemFont(ofSize: 20)
         setButtonConstraints(toItem: signInButton, topAnchorConstraint: 350)
         signInButton.layer.cornerRadius = 10
-        signInButton.layer.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        signInButton.layer.backgroundColor = UIColor.black.cgColor
         signInButton.addTarget(self, action:#selector(self.signInButtonClicked), for: .touchUpInside)
     }
 }
 
 // MARK: Constraints
+
 private extension LoginViewController {
     func setTextFieldConstraints(toItem: UITextField, topAnchorConstraint: CGFloat) {
         toItem.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             toItem.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topAnchorConstraint),
             toItem.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
@@ -140,7 +175,6 @@ private extension LoginViewController {
     
     func setLabelConstraints(toItem: UILabel, topAnchorConstraint: CGFloat) {
         toItem.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             toItem.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topAnchorConstraint),
             toItem.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
@@ -151,7 +185,6 @@ private extension LoginViewController {
     
     func setButtonConstraints(toItem: UIButton, topAnchorConstraint: CGFloat) {
         toItem.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             toItem.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topAnchorConstraint),
             toItem.widthAnchor.constraint(equalToConstant: 100),

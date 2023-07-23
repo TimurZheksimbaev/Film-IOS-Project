@@ -7,7 +7,9 @@
 
 import UIKit
 
-class EyeButton: UIButton {
+final class EyeButton: UIButton {
+    
+    //MARK: Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupEyeButton()
@@ -18,7 +20,8 @@ class EyeButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupEyeButton() {
+    //MARK: Settings
+    private func setupEyeButton() {
         setImage(UIImage(systemName: "eye.slash"), for: .normal)
         tintColor = .white
         widthAnchor.constraint(equalToConstant: 40).isActive = true

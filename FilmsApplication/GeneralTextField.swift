@@ -7,10 +7,13 @@
 
 import UIKit
 
-class GeneralTextField: UITextField {
+final class GeneralTextField: UITextField {
     
+    //MARK: Private property
     let padding = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 40)
     
+    
+    //MARK: Initializers
     init(placeholder: String) {
         super.init(frame: .zero)
         setupTextField(placeholder: placeholder)
@@ -21,6 +24,7 @@ class GeneralTextField: UITextField {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: Override methods
     override func textRect(forBounds bounds: CGRect) -> CGRect {
         bounds.inset(by: padding)
     }
@@ -33,7 +37,8 @@ class GeneralTextField: UITextField {
         bounds.inset(by: padding)
     }
     
-    func setupTextField(placeholder: String) {
+    //MARK: Settings
+    private func setupTextField(placeholder: String) {
         textColor = .white
         layer.cornerRadius = 10
         layer.backgroundColor = #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1)

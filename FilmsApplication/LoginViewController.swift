@@ -4,93 +4,52 @@ import UIKit
 
 final class LoginViewController: UIViewController {
 
-    let emailTextField = GeneralTextField(placeholder: "Enter your email address")
-    let passwordTextField = GeneralTextField(placeholder: "Enter your password")
+    //MARK: Private properties
+    private let emailTextField = GeneralTextField(placeholder: "Enter your email address")
+    private let passwordTextField = GeneralTextField(placeholder: "Enter your password")
     
-    let signInButton = UIButton()
+    private let signInButton = UIButton()
     
-    let emailLabel = UILabel()
-    let passwordLabel = UILabel()
+    private let emailLabel = UILabel()
+    private let passwordLabel = UILabel()
     
-    let eyeButtonForPassword = EyeButton()
+    private let eyeButtonForPassword = EyeButton()
     
-    var isEyeButtonForPasswordPrivate = true
-
+    private var isEyeButtonForPasswordPrivate = true
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        emailTextField.autocapitalizationType = .none
-        passwordTextField.autocapitalizationType = .none
-        passwordTextField.isSecureTextEntry = true
-        emailTextField.keyboardType = .emailAddress
-        
         setupView()
-        
-        configureLabels()
-        configureTextFields()
-        
-        configureSignInButton()
     }
     
-    func configureLabels() {
-        self.view.addSubview(emailLabel)
-        emailLabel.textColor = .black
-        emailLabel.text = "Email"
-        emailLabel.font = .systemFont(ofSize: 22)
-        setLabelConstraints(toItem: emailLabel, topAnchorConstraint: 50)
-        
-        self.view.addSubview(passwordLabel)
-        passwordLabel.textColor = .black
-        passwordLabel.text = "Password"
-        passwordLabel.font = .systemFont(ofSize: 22)
-        setLabelConstraints(toItem: passwordLabel, topAnchorConstraint: 190)
-    }
-    
-    func configureTextFields() {
-        emailTextField.autocapitalizationType = .none
-        passwordTextField.autocapitalizationType = .none
-        passwordTextField.isSecureTextEntry = true
-        emailTextField.keyboardType = .emailAddress
-    }
-    
-    func configureSignInButton() {
-        self.view.addSubview(signInButton)
-        
-        signInButton.setTitle("Sign in", for: .normal)
-        signInButton.setTitleColor(UIColor.white, for: .normal)
-        signInButton.titleLabel?.font = .systemFont(ofSize: 20)
-        setButtonConstraints(toItem: signInButton, topAnchorConstraint: 350)
-        signInButton.layer.cornerRadius = 10
-        signInButton.layer.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-        signInButton.addTarget(self, action:#selector(self.signInButtonClicked), for: .touchUpInside)
-    }
-    
-    @objc func signInButtonClicked() {
-        if passwordTextField.text != "" && emailTextField.text != "" {
-            Auth.auth().signIn(withEmail: emailTextField.text!, password: passwordTextField.text!) {(result, error) in
-                if error == nil {
-                    self.showAlertWithWarning("Success!")
-
-                } else if self.passwordTextField.text!.count < 6 {
-                    self.showAlertWithWarning("Password length should be 6 or more")
-                } else {
-                    self.showAlertWithWarning("Incorrect email or/and password")
-                }
-            }
-        } else {
+    //MARK: Private methods
+    @objc private func signInButtonClicked() {
+        guard let password = passwordTextField.text, !password.isEmpty, let email = emailTextField.text, !email.isEmpty else {
             showAlertWithWarning("Please fill all the fields")
+            return
+        }
+    
+        Auth.auth().signIn(withEmail: email, password: password) {(result, error) in
+            if error == nil {
+                self.showAlertWithWarning("Success!")
+            } else if password.count < 6 {
+                self.showAlertWithWarning("Password length should be 6 or more")
+            } else {
+                print(error.debugDescription)
+                self.showAlertWithWarning("Incorrect email or/and password")
+            }
         }
     }
     
-    func showAlertWithWarning(_ warning: String) {
+    private func showAlertWithWarning(_ warning: String) {
         let alert = UIAlertController(title: "Warning", message: warning, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     
-    @objc func eyeButtonForPasswordPressed() {
+    @objc private func eyeButtonForPasswordPressed() {
         let imageName = isEyeButtonForPasswordPrivate ? "eye" : "eye.slash"
         
         passwordTextField.isSecureTextEntry.toggle()
@@ -101,43 +60,74 @@ final class LoginViewController: UIViewController {
 }
 
 // MARK: Setting views
-extension LoginViewController {
+private extension LoginViewController {
     func setupView() {
         view.backgroundColor = .white
         addSubViews()
         addActions()
         
-        setupPassword()
-        
-        setupLayout()
+        configureTextFields()
+        configureLabels()
+        configureSignInButton()
     }
+    
+    
 }
 
-// MARK: Setting
-extension LoginViewController {
+// MARK: Configurations
+private extension LoginViewController {
     func addSubViews() {
         view.addSubview(passwordTextField)
         view.addSubview(emailTextField)
+        view.addSubview(emailLabel)
+        view.addSubview(passwordLabel)
+        view.addSubview(signInButton)
     }
     
     func addActions() {
         eyeButtonForPassword.addTarget(self, action: #selector(self.eyeButtonForPasswordPressed), for: .touchUpInside)
     }
     
-    func setupPassword() {
+    private func configureLabels() {
+        emailLabel.textColor = .black
+        emailLabel.text = "Email"
+        emailLabel.font = .systemFont(ofSize: 22)
+        
+        passwordLabel.textColor = .black
+        passwordLabel.text = "Password"
+        passwordLabel.font = .systemFont(ofSize: 22)
+        
+        // Constraints
+        setLabelConstraints(toItem: emailLabel, topAnchorConstraint: 50)
+        setLabelConstraints(toItem: passwordLabel, topAnchorConstraint: 190)
+    }
+    
+    private func configureTextFields() {
+        emailTextField.autocapitalizationType = .none
+        emailTextField.keyboardType = .emailAddress
+        setTextFieldConstraints(toItem: emailTextField, topAnchorConstraint: 100)
+        
+        passwordTextField.autocapitalizationType = .none
+        passwordTextField.isSecureTextEntry = true
         passwordTextField.rightView = eyeButtonForPassword
         passwordTextField.rightViewMode = .always
+        setTextFieldConstraints(toItem: passwordTextField, topAnchorConstraint: 240)
+
+    }
+    
+    private func configureSignInButton() {
+        signInButton.setTitle("Sign in", for: .normal)
+        signInButton.setTitleColor(UIColor.white, for: .normal)
+        signInButton.titleLabel?.font = .systemFont(ofSize: 20)
+        setButtonConstraints(toItem: signInButton, topAnchorConstraint: 350)
+        signInButton.layer.cornerRadius = 10
+        signInButton.layer.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        signInButton.addTarget(self, action:#selector(self.signInButtonClicked), for: .touchUpInside)
     }
 }
 
-// MARK: Layouts (constraints)
-extension LoginViewController {
-    func setupLayout() {
-        
-        setTextFieldConstraints(toItem: emailTextField, topAnchorConstraint: 100)
-        setTextFieldConstraints(toItem: passwordTextField, topAnchorConstraint: 240)
-    }
-    
+// MARK: Constraints
+private extension LoginViewController {
     func setTextFieldConstraints(toItem: UITextField, topAnchorConstraint: CGFloat) {
         toItem.translatesAutoresizingMaskIntoConstraints = false
         

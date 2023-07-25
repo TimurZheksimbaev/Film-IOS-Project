@@ -61,9 +61,9 @@ final class DetailViewController: UIViewController, WKNavigationDelegate {
         watchButton.titleLabel?.adjustsFontSizeToFitWidth = true
         watchButton.backgroundColor = UIColor(named: Constants.defaultOrange)
         watchButton.setTitleColor(UIColor.black, for: .normal)
-        watchButton.layer.cornerRadius = Constants.watchButtonCornerRadiusValue
+        watchButton.layer.cornerRadius = CGFloat(Constants.watchButtonCornerRadiusValue)
         watchButton.layer.borderColor = UIColor.orange.cgColor
-        watchButton.layer.borderWidth = Constants.watchButtonBorderWidthValue
+        watchButton.layer.borderWidth = CGFloat(Constants.watchButtonBorderWidthValue)
         return watchButton
     }()
 
@@ -77,7 +77,7 @@ final class DetailViewController: UIViewController, WKNavigationDelegate {
     private let movieRatingLabel: UILabel = {
         let movieRatingLabel = UILabel()
         movieRatingLabel.translatesAutoresizingMaskIntoConstraints = false
-        movieRatingLabel.font = .boldSystemFont(ofSize: Constants.movieRatingLabelFontSizeValue)
+        movieRatingLabel.font = .boldSystemFont(ofSize: CGFloat(Constants.movieRatingLabelFontSizeValue))
         movieRatingLabel.textColor = UIColor.orange
         movieRatingLabel.textAlignment = .center
         return movieRatingLabel
@@ -158,26 +158,26 @@ final class DetailViewController: UIViewController, WKNavigationDelegate {
 
     private func createWatchButtonConstraints() {
         watchButton.leftAnchor
-            .constraint(equalTo: scrollView.leftAnchor, constant: Constants.watchButtonLeftAnchorValue).isActive = true
+            .constraint(equalTo: scrollView.leftAnchor, constant: CGFloat(Constants.watchButtonLeftAnchorValue)).isActive = true
         watchButton.topAnchor.constraint(
             equalTo: movieImageView.bottomAnchor,
-            constant: Constants.watchButtonTopAnchorValue
+            constant: CGFloat(Constants.watchButtonTopAnchorValue)
         ).isActive = true
         watchButton.widthAnchor.constraint(
             equalTo: scrollView.widthAnchor,
-            constant: Constants.watchButtonWidthAnchorValue
+            constant: CGFloat(Constants.watchButtonWidthAnchorValue)
         ).isActive = true
-        watchButton.heightAnchor.constraint(equalToConstant: Constants.watchButtonHeightAnchorValue).isActive = true
+        watchButton.heightAnchor.constraint(equalToConstant: CGFloat(Constants.watchButtonHeightAnchorValue)).isActive = true
     }
 
     private func createMovieImageViewConstraints() {
         movieImageView.leftAnchor.constraint(
             equalTo: scrollView.leftAnchor,
-            constant: Constants.movieImageViewLeftAnchorValue
+            constant: CGFloat(Constants.movieImageViewLeftAnchorValue)
         ).isActive = true
         movieImageView.widthAnchor.constraint(equalToConstant: view.bounds.width).isActive = true
         movieImageView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-        movieImageView.heightAnchor.constraint(equalToConstant: Constants.movieImageViewHeightAnchorValue)
+        movieImageView.heightAnchor.constraint(equalToConstant: CGFloat(Constants.movieImageViewHeightAnchorValue))
             .isActive = true
     }
 
@@ -193,31 +193,31 @@ final class DetailViewController: UIViewController, WKNavigationDelegate {
         movieDescriptionLabel.topAnchor.constraint(equalTo: movieRatingLabel.bottomAnchor, constant: 15).isActive = true
         movieDescriptionLabel.widthAnchor.constraint(
             equalTo: view.widthAnchor,
-            constant: Constants.movieDescriptionLabelWidthAnchorValue
+            constant: CGFloat(Constants.movieDescriptionLabelWidthAnchorValue)
         ).isActive = true
         movieDescriptionLabel.leftAnchor.constraint(
             equalTo: scrollView.leftAnchor,
-            constant: Constants.movieDescriptionLabelLeftAnchorValue
+            constant: CGFloat(Constants.movieDescriptionLabelLeftAnchorValue)
         ).isActive = true
         movieDescriptionLabel.rightAnchor.constraint(
             equalTo: scrollView.rightAnchor,
-            constant: Constants.movieDescriptionLabelRightAnchorValue
+            constant: CGFloat(Constants.movieDescriptionLabelRightAnchorValue)
         ).isActive = true
         movieDescriptionLabel.bottomAnchor.constraint(
             equalTo: scrollView.bottomAnchor,
-            constant: Constants.movieDescriptionLabelBottomAnchorValue
+            constant: CGFloat(Constants.movieDescriptionLabelBottomAnchorValue)
         ).isActive = true
     }
 
     private func createRatingLabelConstraints() {
         movieRatingLabel.topAnchor.constraint(
             equalTo: watchButton.bottomAnchor,
-            constant: Constants.movieRatingTopAnchorValue
+            constant: CGFloat(Constants.movieRatingTopAnchorValue)
         ).isActive = true
         movieRatingLabel.widthAnchor.constraint(equalToConstant: view.bounds.width).isActive = true
         movieRatingLabel.leftAnchor.constraint(equalTo: scrollView.leftAnchor).isActive = true
         movieRatingLabel.rightAnchor.constraint(equalTo: scrollView.rightAnchor).isActive = true
-        movieRatingLabel.heightAnchor.constraint(equalToConstant: Constants.movieRatingHeightAnchorValue)
+        movieRatingLabel.heightAnchor.constraint(equalToConstant: CGFloat(Constants.movieRatingHeightAnchorValue))
             .isActive = true
     }
 

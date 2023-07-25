@@ -10,9 +10,9 @@ final class LoginViewController: UIViewController {
     private let passwordTextField = GeneralTextField(placeholder: TextsEnum.enterPassword.rawValue)
     
     private let signInButton = UIButton()
+    private let forgotPasswordButton = UIButton()
     
-    private let emailLabel = UILabel()
-    private let passwordLabel = UILabel()
+    private let loginLabel = UILabel()
     
     private let eyeButtonForPassword = EyeButton()
     private var isEyeButtonForPasswordPrivate = true
@@ -88,6 +88,10 @@ final class LoginViewController: UIViewController {
         eyeButtonForPassword.setImage(UIImage(systemName: imageName), for: .normal)
         isEyeButtonForPasswordPrivate.toggle()
     }
+    
+    @objc private func forgotPasswordButtonClicked() {
+        navigationController?.pushViewController(ForgotPasswordViewController(), animated: true)
+    }
 
 }
 
@@ -103,6 +107,7 @@ private extension LoginViewController {
         configureTextFields()
         configureLabels()
         configureSignInButton()
+        configureForgotPasswordButton()
     }
     
     
@@ -114,9 +119,9 @@ private extension LoginViewController {
     func addSubViews() {
         view.addSubview(passwordTextField)
         view.addSubview(emailTextField)
-        view.addSubview(emailLabel)
-        view.addSubview(passwordLabel)
+        view.addSubview(loginLabel)
         view.addSubview(signInButton)
+        view.addSubview(forgotPasswordButton)
     }
     
     func addActions() {
@@ -124,28 +129,35 @@ private extension LoginViewController {
     }
     
     func configureLabels() {
-        emailLabel.textColor = .black
-        emailLabel.text = TextsEnum.email.rawValue
-        emailLabel.font = .systemFont(ofSize: 22)
-        
-        passwordLabel.textColor = .black
-        passwordLabel.text = TextsEnum.email.rawValue
-        passwordLabel.font = .systemFont(ofSize: 22)
-        
-        setLabelConstraints(toItem: emailLabel, topAnchorConstraint: 50)
-        setLabelConstraints(toItem: passwordLabel, topAnchorConstraint: 190)
+        loginLabel.textColor = .black
+        loginLabel.text = "Login"
+        loginLabel.textAlignment = .center
+        loginLabel.font = .systemFont(ofSize: 30)
+        setLabelConstraints(toItem: loginLabel, topAnchorConstraint: 10)
     }
     
     func configureTextFields() {
         emailTextField.autocapitalizationType = .none
         emailTextField.keyboardType = .emailAddress
-        setTextFieldConstraints(toItem: emailTextField, topAnchorConstraint: 100)
         
         passwordTextField.autocapitalizationType = .none
         passwordTextField.isSecureTextEntry = true
         passwordTextField.rightView = eyeButtonForPassword
         passwordTextField.rightViewMode = .always
-        setTextFieldConstraints(toItem: passwordTextField, topAnchorConstraint: 240)
+        
+        let stackView = UIStackView()
+        self.view.addSubview(stackView)
+        stackView.addArrangedSubview(emailTextField)
+        stackView.addArrangedSubview(passwordTextField)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.distribution = UIStackView.Distribution.equalSpacing
+        stackView.spacing = 35.0
+        stackView.alignment = UIStackView.Alignment.center
+        stackView.axis = .vertical
+        emailTextField.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -70).isActive = true
+        passwordTextField.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -70).isActive = true
+        stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70).isActive = true
+        stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30).isActive = true
 
     }
     
@@ -154,10 +166,22 @@ private extension LoginViewController {
         signInButton.setTitle("Sign in", for: .normal)
         signInButton.setTitleColor(UIColor.white, for: .normal)
         signInButton.titleLabel?.font = .systemFont(ofSize: 20)
-        setButtonConstraints(toItem: signInButton, topAnchorConstraint: 350)
+        setButtonConstraints(toItem: signInButton, topAnchorConstraint: 260)
+        signInButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
         signInButton.layer.cornerRadius = 10
         signInButton.layer.backgroundColor = UIColor.black.cgColor
         signInButton.addTarget(self, action:#selector(self.signInButtonClicked), for: .touchUpInside)
+    }
+    
+    func configureForgotPasswordButton() {
+        forgotPasswordButton.setTitle("Forgot password", for: .normal)
+        forgotPasswordButton.titleLabel?.font = .systemFont(ofSize: 20)
+        setButtonConstraints(toItem: forgotPasswordButton, topAnchorConstraint: 360)
+        forgotPasswordButton.widthAnchor.constraint(equalToConstant: 170).isActive = true
+        forgotPasswordButton.setTitleColor(UIColor.white, for: .normal)
+        forgotPasswordButton.layer.cornerRadius = 10
+        forgotPasswordButton.layer.backgroundColor = UIColor.red.cgColor
+        forgotPasswordButton.addTarget(self, action:#selector(self.forgotPasswordButtonClicked), for: .touchUpInside)
     }
 }
 
@@ -187,7 +211,6 @@ private extension LoginViewController {
         toItem.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             toItem.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topAnchorConstraint),
-            toItem.widthAnchor.constraint(equalToConstant: 100),
             toItem.heightAnchor.constraint(equalToConstant: 50)
         ])
         toItem.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true

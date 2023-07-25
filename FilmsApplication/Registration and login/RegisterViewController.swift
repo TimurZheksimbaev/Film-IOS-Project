@@ -19,10 +19,8 @@ final class RegisterViewController: UIViewController {
     private let signUpButton = UIButton()
     private let signInButton = UIButton()
     
-    private let usernameLabel = UILabel()
-    private let emailLabel = UILabel()
-    private let passwordLabel = UILabel()
     private let askLabel = UILabel()
+    private let registrationLabel = UILabel()
     
     private let eyeButtonForPassword = EyeButton()
     
@@ -159,14 +157,8 @@ private extension RegisterViewController {
 
 private extension RegisterViewController {
     func addSubViews() {
-        view.addSubview(usernameTextField)
-        view.addSubview(passwordTextField)
-        view.addSubview(emailTextField)
-        
-        view.addSubview(usernameLabel)
-        view.addSubview(emailLabel)
-        view.addSubview(passwordLabel)
         view.addSubview(askLabel)
+        view.addSubview(registrationLabel)
         
         view.addSubview(signInButton)
         view.addSubview(signUpButton)
@@ -177,26 +169,17 @@ private extension RegisterViewController {
     }
     
     func configureLabels() {
-        usernameLabel.textColor = .black
-        usernameLabel.text = "Username"
-        usernameLabel.font = .systemFont(ofSize: 22)
-        setLabelConstraints(toItem: usernameLabel, topAnchorConstraint: 0)
-        
-        emailLabel.textColor = .black
-        emailLabel.text = TextsEnum.email.rawValue
-        emailLabel.font = .systemFont(ofSize: 22)
-        setLabelConstraints(toItem: emailLabel, topAnchorConstraint: 130)
-        
-        passwordLabel.textColor = .black
-        passwordLabel.text = TextsEnum.password.rawValue
-        passwordLabel.font = .systemFont(ofSize: 22)
-        setLabelConstraints(toItem: passwordLabel, topAnchorConstraint: 260)
+        registrationLabel.textColor = .black
+        registrationLabel.text = "Registration"
+        registrationLabel.textAlignment = .center
+        registrationLabel.font = .systemFont(ofSize: 30)
+        setLabelConstraints(toItem: registrationLabel, topAnchorConstraint: 10)
         
         askLabel.textColor = .black
         askLabel.text = "Already have an account?"
         askLabel.textAlignment = .center
         askLabel.font = .systemFont(ofSize: 22)
-        setLabelConstraints(toItem: askLabel, topAnchorConstraint: 460)
+        setLabelConstraints(toItem: askLabel, topAnchorConstraint: 440)
     }
     
     func configureTextFields() {
@@ -208,16 +191,29 @@ private extension RegisterViewController {
         passwordTextField.rightView = eyeButtonForPassword
         passwordTextField.rightViewMode = .always
         
-        setTextFieldConstraints(toItem: usernameTextField, topAnchorConstraint: 50)
-        setTextFieldConstraints(toItem: emailTextField, topAnchorConstraint: 180)
-        setTextFieldConstraints(toItem: passwordTextField, topAnchorConstraint: 310)
+        let stackView = UIStackView()
+        self.view.addSubview(stackView)
+        stackView.addArrangedSubview(usernameTextField)
+        stackView.addArrangedSubview(emailTextField)
+        stackView.addArrangedSubview(passwordTextField)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.distribution = UIStackView.Distribution.equalSpacing
+        stackView.spacing = 35.0
+        stackView.alignment = UIStackView.Alignment.center
+        stackView.axis = .vertical
+        usernameTextField.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -70).isActive = true
+        emailTextField.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -70).isActive = true
+        passwordTextField.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -70).isActive = true
+        stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70).isActive = true
+        stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30).isActive = true
     }
     
     func configureSignInButton() {
         signInButton.setTitle("Sign in", for: .normal)
         signInButton.setTitleColor(UIColor.white, for: .normal)
         signInButton.titleLabel?.font = .systemFont(ofSize: 20)
-        setButtonConstraints(toItem: signInButton, topAnchorConstraint: 510)
+        setButtonConstraints(toItem: signInButton, topAnchorConstraint: 480)
+        signInButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
         signInButton.layer.cornerRadius = 10
         signInButton.layer.backgroundColor = UIColor.black.cgColor
         signInButton.addTarget(self, action:#selector(self.signInButtonClicked), for: .touchUpInside)
@@ -226,12 +222,12 @@ private extension RegisterViewController {
     func configureSignUpButton() {
         signUpButton.setTitle("Sign up", for: .normal)
         signUpButton.titleLabel?.font = .systemFont(ofSize: 20)
-        setButtonConstraints(toItem: signUpButton, topAnchorConstraint: 390)
+        setButtonConstraints(toItem: signUpButton, topAnchorConstraint: 350)
+        signUpButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
         signUpButton.setTitleColor(UIColor.white, for: .normal)
         signUpButton.layer.cornerRadius = 10
         signUpButton.layer.backgroundColor = UIColor.black.cgColor
         signUpButton.addTarget(self, action:#selector(self.signUpButtonClicked), for: .touchUpInside)
-        
     }
 }
 
@@ -239,30 +235,18 @@ private extension RegisterViewController {
 
 private extension RegisterViewController {
     
-    func setTextFieldConstraints(toItem: UITextField, topAnchorConstraint: CGFloat) {
-        toItem.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            toItem.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topAnchorConstraint),
-            toItem.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            toItem.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -70)
-        ])
-    }
-    
     func setLabelConstraints(toItem: UILabel, topAnchorConstraint: CGFloat) {
         toItem.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            toItem.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topAnchorConstraint),
-            toItem.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 30),
-            toItem.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -70),
-            toItem.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.07)
+            toItem.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topAnchorConstraint)
         ])
+        toItem.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
     
     func setButtonConstraints(toItem: UIButton, topAnchorConstraint: CGFloat) {
         toItem.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             toItem.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: topAnchorConstraint),
-            toItem.widthAnchor.constraint(equalToConstant: 100),
             toItem.heightAnchor.constraint(equalToConstant: 50)
         ])
         toItem.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true

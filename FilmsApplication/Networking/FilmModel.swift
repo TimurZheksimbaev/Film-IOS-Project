@@ -20,10 +20,11 @@ struct Film: Codable {
     let filmLength: String?
     let genres: [Genre]?
     let posterUrl: String?
+    let rating: String?
 }
 
 extension Film {
-    static let example = Film(filmId: 0, nameRu: "default name", year: "default year", filmLength: "default lenght", genres: [Genre(genre: "default genre")], posterUrl: "default poster")
+    static let example = Film(filmId: 0, nameRu: "default name", year: "default year", filmLength: "default lenght", genres: [Genre(genre: "default genre")], posterUrl: "default poster", rating: "77")
 }
 
 struct Genre: Codable {

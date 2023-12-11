@@ -6,7 +6,7 @@
 
 ## Databases used:
 * Firebase
-* Local database Coredata
+* Coredata
 
 ## App structure:
 * ## Register and Login views.

@@ -57,70 +57,42 @@ final class RegisterViewController: UIViewController {
     }
     
     func goToMainPage() {
+
         let tab = UITabBarController()
-        
+
         let home = UINavigationController(rootViewController: HomeViewController())
         home.title = "Home"
+
         let search = UINavigationController(rootViewController: SearchViewController())
         search.title = "Search"
+
         let profile = UINavigationController(rootViewController: ProfileViewController())
         profile.title = "Profile"
-        
-        
-        
+
+        let liked = UINavigationController(rootViewController: LikedFilmsViewController())
+        liked.title = "Liked"
+
         tab.tabBar.tintColor = .black
-        
-        
-        
-        
-        tab.setViewControllers([home, search, profile], animated: false)
-        
+
+        tab.setViewControllers([home, search, liked,  profile], animated: false)
+
         guard let items = tab.tabBar.items else { return }
-        
-        let images = ["house", "magnifyingglass.circle", "person.circle"]
-        
-        for i in 0...2 {
+
+        let images = ["house", "magnifyingglass.circle", "heart", "person.circle"]
+
+        for i in 0...images.count-1 {
             items[i].image = UIImage(systemName: images[i])
+
         }
-        
+
         tab.modalPresentationStyle = .fullScreen
         
         navigationController?.present(tab, animated: true)
+
     }
     
     @objc private func signInButtonClicked() {
-        navigationController?.pushViewController(LoginViewController(), animated: true)
-        
-        //        let tab = UITabBarController()
-        //
-        //        let home = UINavigationController(rootViewController: HomeViewController())
-        //        home.title = "Home"
-        //        let search = UINavigationController(rootViewController: SearchViewController())
-        //        search.title = "Search"
-        //        let profile = UINavigationController(rootViewController: ProfileViewController())
-        //        profile.title = "Profile"
-        //
-        //
-        //
-        //        tab.tabBar.tintColor = .black
-        //
-        //
-        //
-        //
-        //        tab.setViewControllers([home, search, profile], animated: false)
-        //
-        //        guard let items = tab.tabBar.items else { return }
-        //
-        //        let images = ["house", "magnifyingglass.circle", "person.circle"]
-        //
-        //        for i in 0...2 {
-        //            items[i].image = UIImage(systemName: images[i])
-        //        }
-        //
-        //        tab.modalPresentationStyle = .fullScreen
-        //
-        //        navigationController?.present(tab, animated: true)
-        
+        navigationController?.pushViewController(LoginViewController(), animated: true)        
     }
     
     private func showAlertWithWarning(_ warning: String) {

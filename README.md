@@ -28,7 +28,10 @@
   <img src="https://github.com/TimurZheksimbaev/Film-IOS-Project/blob/main/Profile.png" alt="image" width="234" height="504">
 * ## Film Details
   #### Shows detailed description of film, allows to visit Kinopoisk website using Webkit.
-  
+* ## Demo Video
+https://github.com/TimurZheksimbaev/Film-IOS-Project/assets/113367706/8a274456-469d-4353-914a-e79226d60584
+
+
 
 ## Networking:
 * #### All films are taken from Unofficial Kinopoisk API, on Main page for Collection View with popular films i make network call to this API and for Table View i store them in CoreData for faster access

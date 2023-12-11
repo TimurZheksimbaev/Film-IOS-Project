@@ -11,7 +11,9 @@
 # App structure:
 * ## Register and Login views.
   #### Login with "forgot password" ability, registered users are saved to Firebase database.
-  ![Register](https://disk.yandex.ru/client/disk?idApp=client&dialog=slider&idDialog=%2Fdisk%2FLogin.png "Register View")
+  <img src="https://github.com/TimurZheksimbaev/Film-IOS-Project/blob/main/Registration.png" alt="image" width="234" height="504">
+
+
 * ## Main page
   #### Popular films are showed and stored in Collection View and additional Table View of films when pressing button
 * ## Search
@@ -25,4 +27,4 @@
 
 ## Networking:
 * #### All films are taken from Unofficial Kinopoisk API, on Main page for Collection View with popular films i make network call to this API and for Table View i store them in CoreData for faster access
-*
+
